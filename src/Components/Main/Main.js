@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./main.css";
 import axios from "axios";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-
+import { useNavigate } from "react-router-dom";
 export default function Main() {
   const [moviearr, setMovieArr] = useState([]);
   const [moviearr2, setMovieArr2] = useState([]);
   const [i, setI] = useState(1);
   const [currentMovie, setCurrentMovie] = useState({});
-
+  const navigate = useNavigate();
   const handleForward = () => {
     if (moviearr.indexOf(currentMovie) == moviearr.length - 1) {
       setCurrentMovie(moviearr[0]);
@@ -24,7 +24,7 @@ export default function Main() {
   const handleBackward = () => {
     if (moviearr.indexOf(currentMovie) == 0) {
       setCurrentMovie(moviearr[moviearr.length - 1]);
-      setI(i - 1);
+      setI(0);
     } else if (moviearr.indexOf(currentMovie) == 1) {
       setCurrentMovie(moviearr[0]);
       setI(0);
@@ -32,9 +32,12 @@ export default function Main() {
       setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) - 1]);
       console.log(moviearr);
 
-      setI(moviearr.indexOf(currentMovie) - 2);
+      setI(moviearr.indexOf(currentMovie) + 1);
     }
   };
+  function handleVideo(elem) {
+    navigate("/play/" + elem);
+  }
 
   const getMovies = async () => {
     const res = await axios.get(
@@ -70,7 +73,13 @@ export default function Main() {
         </button>
         <div className="title">
           {/* <a href={currentMovie.video_link}> */}
-          <PlayCircleOutlineIcon style={{ fontSize: "60px" }} /> {/* </a> */}
+          <PlayCircleOutlineIcon
+            style={{ fontSize: "60px" }}
+            onClick={() => {
+              handleVideo(currentMovie.id);
+            }}
+          />{" "}
+          {/* </a> */}
           <h1>{currentMovie.title}</h1>
         </div>
       </div>
@@ -78,7 +87,7 @@ export default function Main() {
         <h2>Up Next</h2>
 
         {moviearr2
-          .slice(i, moviearr2.length - 1)
+          .slice(i, moviearr2.length)
           .filter((elem, index) => index < 3)
           .map((elem) => {
             return (

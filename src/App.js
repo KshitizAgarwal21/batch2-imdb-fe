@@ -20,21 +20,8 @@ function App() {
         <Ad />
 
         <Routes>
-          <Route path="/" element={<MainComp />}>
-            <Route path="/" element={<ProtectedLayout />}>
-              <Route
-                path="/"
-                element={
-                  <MovieCarousel
-                    heading="From Your Watchlist"
-                    api="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
-                  />
-                }
-              ></Route>
-            </Route>
-          </Route>
-
-          <Route path="/play/" element={<Play />}></Route>
+          <Route path="/" element={<MainComp />}></Route>
+          <Route path="/play/:id" element={<Play />}></Route>
         </Routes>
       </BrowserRouter>
     </>

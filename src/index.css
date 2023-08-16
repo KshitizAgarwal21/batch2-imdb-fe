@@ -28,3 +28,13 @@ a{
   padding: 10px;
   cursor: pointer;
 }
+.playpause{
+  background-color: red;
+  border: none;
+  cursor: pointer;
+  margin-top: 20px;
+  border-radius: 50%;
+  color: wheat;
+  width: 100px;
+  height: 100px;
+}

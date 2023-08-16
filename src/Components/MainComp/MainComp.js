@@ -3,6 +3,8 @@ import MovieCarousel from "../MovieCarousel/MovieCarousel";
 import Main from "../Main/Main";
 import FallbackComp from "../FallbackComp";
 import { Suspense } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProtectedLayout from "../ProtectedLayout/ProtectedLayout";
 const Explore = React.lazy(() => import("../Explore/Explore"));
 export default function MainComp() {
   return (
@@ -14,6 +16,19 @@ export default function MainComp() {
         heading="Top Picks"
         api="https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1"
       ></MovieCarousel>
+      <Routes>
+        <Route path="/" element={<ProtectedLayout />}>
+          <Route
+            path="/"
+            element={
+              <MovieCarousel
+                heading="From Your Watchlist"
+                api="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
+              />
+            }
+          ></Route>
+        </Route>
+      </Routes>
       <MovieCarousel
         heading="Popular"
         api="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
