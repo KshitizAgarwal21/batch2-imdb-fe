@@ -12,6 +12,7 @@ import FallbackComp from "./Components/FallbackComp";
 import Play from "./Components/Play/Play";
 import MainComp from "./Components/MainComp/MainComp";
 import Footer from "./Components/Footer/Footer";
+import Login from "./Components/Login/Login";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainComp />}></Route>
           <Route path="/play/:id" element={<Play />}></Route>
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </BrowserRouter>

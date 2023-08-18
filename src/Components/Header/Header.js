@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -21,6 +22,7 @@ export default function Header() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const navigate = useNavigate();
   return (
     <div>
       <header>
@@ -93,7 +95,14 @@ export default function Header() {
         <input className="search" type="text" placeholder="Search IMDB"></input>
 
         <button className="watchlist">+WatchList</button>
-        <button className="watchlist">Sign in</button>
+        <button
+          className="watchlist"
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          Sign in
+        </button>
         <select className="language-select">
           <default>EN</default>
           <option>EN</option>

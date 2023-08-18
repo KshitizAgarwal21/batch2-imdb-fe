@@ -46,6 +46,8 @@ a{
   font-weight: 700;
   border-radius: 10px;
   cursor: pointer;
+  margin: 0 auto;
+  display: block;
 }
 .ftr-menu{
   display: flex;
@@ -62,4 +64,18 @@ a{
 .ftr{
   position: relative;
   bottom: 0;
+  margin-top: 50px;
+}
+input{
+  width: 200px;
+}
+label{
+  display: block;
+  width: 120px;
+}
+.gsi{
+  margin-top: 20px;
+  width: 250px;
+  height: 50px;
+  cursor: pointer;
 }
