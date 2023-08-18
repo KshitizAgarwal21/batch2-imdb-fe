@@ -38,3 +38,28 @@ a{
   width: 100px;
   height: 100px;
 }
+.ftr-btn{
+  border: none;
+  background-color: yellow;
+  padding: 10px;
+  color: black;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.ftr-menu{
+  display: flex;
+  flex-wrap: wrap;
+ width: 40%;
+ margin: 0 auto;
+  color: #fff;
+  justify-content: center;
+}
+.ftr-menu p{
+  margin-left: 20px;
+
+}
+.ftr{
+  position: relative;
+  bottom: 0;
+}

@@ -4,11 +4,23 @@ import axios from "axios";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { useNavigate } from "react-router-dom";
 export default function Main() {
+  let myinterval;
   const [moviearr, setMovieArr] = useState([]);
   const [moviearr2, setMovieArr2] = useState([]);
   const [i, setI] = useState(1);
   const [currentMovie, setCurrentMovie] = useState({});
   const navigate = useNavigate();
+  let autoupdate = () => {
+    if (moviearr.length > 0) {
+      if (moviearr.indexOf(currentMovie) == moviearr.length - 1) {
+        setCurrentMovie(moviearr[0]);
+        setI(1);
+      } else {
+        setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) + 1]);
+        setI(moviearr.indexOf(currentMovie) + 2);
+      }
+    }
+  };
   const handleForward = () => {
     if (moviearr.indexOf(currentMovie) == moviearr.length - 1) {
       setCurrentMovie(moviearr[0]);
@@ -55,7 +67,11 @@ export default function Main() {
     setCurrentMovie(res.data.results[0]);
   };
   useEffect(() => {
+    myinterval = setInterval(autoupdate, 3000);
+  }, [moviearr, currentMovie]);
+  useEffect(() => {
     getMovies();
+
     // setCurrentMovie(movies[0]);
   }, []);
   return (

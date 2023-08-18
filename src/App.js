@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import FallbackComp from "./Components/FallbackComp";
 import Play from "./Components/Play/Play";
 import MainComp from "./Components/MainComp/MainComp";
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<MainComp />}></Route>
           <Route path="/play/:id" element={<Play />}></Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   );

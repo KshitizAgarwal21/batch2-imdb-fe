@@ -5,6 +5,7 @@ import FallbackComp from "../FallbackComp";
 import { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedLayout from "../ProtectedLayout/ProtectedLayout";
+import Footer from "../Footer/Footer";
 const Explore = React.lazy(() => import("../Explore/Explore"));
 export default function MainComp() {
   return (
