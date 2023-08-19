@@ -26,6 +26,19 @@ export default function MovieCarousel(props) {
   const [movies, setMovies] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const addToWatchlist = async (item) => {
+    const resp = await axios.post(
+      "http://localhost:8080/watchlist/addtowatchlist",
+      item,
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    );
+  };
+
   const handleBackward = () => {
     // document.getElementById("cards").scrollBy({
     //   top: 100,
@@ -52,14 +65,24 @@ export default function MovieCarousel(props) {
     });
   };
   const getMovies = async () => {
-    const res = await axios.get(props.api, {
-      headers: {
-        Authorization:
-          "Bearer " +
-          "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlM2JmMzY2NDAwNmY2YzBhMWY0MWNkNWRmYzdlNTgxYSIsInN1YiI6IjY0ZDNhOGYwZGQ5MjZhMDFlYTlkMzhmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.F2M3pNrTSw2w6k8Idhwnd2Chnoojm97Or3WcLck5EkA", //the token is a variable which holds the token
-      },
-    });
-    setMovies(res.data.results);
+    if (props.auth == "own") {
+      const res = await axios.get(props.api, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      console.log(res.data);
+      setMovies(res.data.results);
+    } else {
+      const res = await axios.get(props.api, {
+        headers: {
+          Authorization:
+            "Bearer " +
+            "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlM2JmMzY2NDAwNmY2YzBhMWY0MWNkNWRmYzdlNTgxYSIsInN1YiI6IjY0ZDNhOGYwZGQ5MjZhMDFlYTlkMzhmMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.F2M3pNrTSw2w6k8Idhwnd2Chnoojm97Or3WcLck5EkA", //the token is a variable which holds the token
+        },
+      });
+      setMovies(res.data.results);
+    }
   };
 
   useEffect(() => {
@@ -82,7 +105,14 @@ export default function MovieCarousel(props) {
               <>
                 {" "}
                 <div className="card">
-                  <button className="overlay">+</button>
+                  <button
+                    className="overlay"
+                    onClick={() => {
+                      addToWatchlist(elem);
+                    }}
+                  >
+                    +
+                  </button>
                   <img
                     src={`https://image.tmdb.org/t/p/w185` + elem.poster_path}
                   ></img>

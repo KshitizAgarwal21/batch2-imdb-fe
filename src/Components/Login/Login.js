@@ -1,8 +1,26 @@
 import { Box } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Histor from "../History/Histor";
 
 export default function Login() {
+  const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData((prev) => {
+      setFormData({ ...prev, [e.target.name]: e.target.value });
+    });
+  };
+  const handleSignin = async () => {
+    const resp = await axios.post(
+      "http://localhost:8080/login/loginapi",
+      formData
+    );
+    localStorage.setItem("token", resp.data.token);
+    navigate("/");
+  };
   return (
     <div>
       <Box
@@ -20,14 +38,24 @@ export default function Login() {
       >
         <h2>Sign in</h2>
         <label for="">Email</label>
-        <input type="text"></input>
+        <input
+          type="text"
+          onChange={(e) => handleChange(e)}
+          name="username"
+        ></input>
         <br />
         <br />
         <label for="">Password</label>
-        <input type="text"></input>
+        <input
+          type="text"
+          onChange={(e) => handleChange(e)}
+          name="password"
+        ></input>
         <br />
         <br />
-        <button className="ftr-btn">Sign in</button>
+        <button className="ftr-btn" onClick={handleSignin}>
+          Sign in
+        </button>
         <img
           src="https://miro.medium.com/v2/resize:fit:1400/1*u0bwdudgoyKjSLntsRcqiw.png"
           className="gsi"

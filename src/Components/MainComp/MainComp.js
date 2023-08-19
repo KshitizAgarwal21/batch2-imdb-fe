@@ -16,6 +16,7 @@ export default function MainComp() {
       <MovieCarousel
         heading="Top Picks"
         api="https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1"
+        auth="tmdb"
       ></MovieCarousel>
       <Routes>
         <Route path="/" element={<ProtectedLayout />}>
@@ -24,7 +25,8 @@ export default function MainComp() {
             element={
               <MovieCarousel
                 heading="From Your Watchlist"
-                api="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
+                api="http://localhost:8080/watchlist/mywatchlist"
+                auth="own"
               />
             }
           ></Route>
@@ -33,6 +35,7 @@ export default function MainComp() {
       <MovieCarousel
         heading="Popular"
         api="https://api.themoviedb.org/3/movie/popular?language=en-US&page=1"
+        auth="tmdb"
       ></MovieCarousel>
       <Suspense fallback={<FallbackComp />}>
         <Explore />
