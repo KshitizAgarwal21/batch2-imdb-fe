@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
+import { isExpired, decodeToken } from "react-jwt";
 export default function ProtectedLayout() {
-  const [isLoggedin, setLoggedIn] = useState(true);
+  const [isLoggedin, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
-    if (localStorage.getItem("token") == null) {
-      setLoggedIn(false);
+    const now = Math.floor(Date.now() / 1000);
+    if (localStorage.getItem("token")) {
+      if (isExpired(localStorage.getItem("token"))) {
+      } else {
+        setLoggedIn(true);
+      }
     }
   }, []);
   return (
@@ -25,7 +31,9 @@ export default function ProtectedLayout() {
             <p>
               Save shows and movies to keep track of what you want to watch.
             </p>
-            <button className="signin">Sign in to IMDB</button>
+            <button className="signin" onClick={() => navigate("/login")}>
+              Sign in to IMDB
+            </button>
           </div>
         </>
       )}

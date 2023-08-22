@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MovieCarousel from "../MovieCarousel/MovieCarousel";
 import Main from "../Main/Main";
 import FallbackComp from "../FallbackComp";

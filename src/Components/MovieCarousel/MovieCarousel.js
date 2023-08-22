@@ -28,15 +28,23 @@ export default function MovieCarousel(props) {
   const handleClose = () => setOpen(false);
 
   const addToWatchlist = async (item) => {
-    const resp = await axios.post(
-      "http://localhost:8080/watchlist/addtowatchlist",
-      item,
-      {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+    try {
+      const resp = await axios.post(
+        "http://localhost:8080/watchlist/addtowatchlist",
+        item,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      if (resp.status == 200) {
+        window.location.reload();
+        alert(resp.data.msg);
       }
-    );
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleBackward = () => {
@@ -65,6 +73,7 @@ export default function MovieCarousel(props) {
     });
   };
   const getMovies = async () => {
+    console.log(props);
     if (props.auth == "own") {
       const res = await axios.get(props.api, {
         headers: {
