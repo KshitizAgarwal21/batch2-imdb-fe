@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom";
 // import { GoogleLogin } from "@leecheuk/react-google-login";
 import { GoogleLogin } from "@react-oauth/google";
 import Histor from "../History/Histor";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [formData, setFormData] = useState({});
+
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData((prev) => {
@@ -16,6 +18,7 @@ export default function Login() {
   };
 
   useEffect(() => {
+    console.log(JSON.parse(Cookies.get("history")));
     if (localStorage.getItem("token")) {
       navigate("/");
     }

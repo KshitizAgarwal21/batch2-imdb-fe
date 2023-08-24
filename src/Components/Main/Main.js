@@ -3,52 +3,53 @@ import "./main.css";
 import axios from "axios";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+let myinterval;
+let historyItems = [];
 export default function Main() {
-  let myinterval;
   const [moviearr, setMovieArr] = useState([]);
   const [moviearr2, setMovieArr2] = useState([]);
+  const [arr, setArr] = useState([1, 2, 3]);
   const [i, setI] = useState(1);
   const [currentMovie, setCurrentMovie] = useState({});
+  const [index, setIndex] = useState(0);
   const navigate = useNavigate();
   let autoupdate = () => {
-    if (moviearr.length > 0) {
-      if (moviearr.indexOf(currentMovie) == moviearr.length - 1) {
-        setCurrentMovie(moviearr[0]);
-        setI(1);
-      } else {
-        setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) + 1]);
-        setI(moviearr.indexOf(currentMovie) + 2);
-      }
-    }
+    setIndex((prev) => prev + 1);
+    setI((prev) => prev + 1);
+    // setCurrentMovie((prev) => moviearr[moviearr.indexOf(prev) + 1]);
   };
+
+  useEffect(() => {
+    if (index > moviearr.length - 1) {
+      setIndex(0);
+      setI(1);
+    }
+    if (index < 0) {
+      setIndex(moviearr.length - 1);
+    }
+  }, [index]);
   const handleForward = () => {
-    if (moviearr.indexOf(currentMovie) == moviearr.length - 1) {
-      setCurrentMovie(moviearr[0]);
-      setI(0);
-    } else if (moviearr.indexOf(currentMovie) == moviearr.length - 2) {
-      setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) + 1]);
-      setI(0);
+    clearInterval(myinterval);
+    if (index == moviearr.length - 1) {
+      setIndex(0);
     } else {
-      setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) + 1]);
-      setI(moviearr.indexOf(currentMovie) + 2);
+      setIndex((prev) => prev + 1);
     }
   };
   const handleBackward = () => {
-    if (moviearr.indexOf(currentMovie) == 0) {
-      setCurrentMovie(moviearr[moviearr.length - 1]);
-      setI(0);
-    } else if (moviearr.indexOf(currentMovie) == 1) {
-      setCurrentMovie(moviearr[0]);
-      setI(0);
+    clearInterval(myinterval);
+    if (index == 0) {
+      setIndex(-1);
     } else {
-      setCurrentMovie(moviearr[moviearr.indexOf(currentMovie) - 1]);
-      console.log(moviearr);
-
-      setI(moviearr.indexOf(currentMovie) + 1);
+      setIndex((prev) => prev - 1);
     }
   };
   function handleVideo(elem) {
-    navigate("/play/" + elem);
+    historyItems.push(elem);
+
+    Cookies.set("history", JSON.stringify(historyItems));
+    navigate("/play/" + elem.id);
   }
 
   const getMovies = async () => {
@@ -67,8 +68,8 @@ export default function Main() {
     setCurrentMovie(res.data.results[0]);
   };
   useEffect(() => {
-    myinterval = setInterval(autoupdate, 3000);
-  }, [moviearr, currentMovie]);
+    myinterval = setInterval(autoupdate, 1000);
+  }, []);
   useEffect(() => {
     getMovies();
 
@@ -81,7 +82,9 @@ export default function Main() {
           {"<"}
         </button>
         <img
-          src={`https://image.tmdb.org/t/p/w1280/` + currentMovie.poster_path}
+          src={
+            `https://image.tmdb.org/t/p/w1280/` + moviearr[index]?.poster_path
+          }
           className="banner"
         ></img>
         <button className="car-nav-right" onClick={handleForward}>
@@ -92,37 +95,118 @@ export default function Main() {
           <PlayCircleOutlineIcon
             style={{ fontSize: "60px" }}
             onClick={() => {
-              handleVideo(currentMovie.id);
+              handleVideo(moviearr[index]);
             }}
           />{" "}
           {/* </a> */}
-          <h1>{currentMovie.title}</h1>
+          <h1>{moviearr[index]?.title}</h1>
         </div>
       </div>
       <div className="vertical-carousel">
         <h2>Up Next</h2>
-
-        {moviearr2
-          .slice(i, moviearr2.length)
-          .filter((elem, index) => index < 3)
-          .map((elem) => {
-            return (
+        {index != moviearr.length - 1 && (
+          <>
+            {index >= moviearr.length - 3 && index <= moviearr.length - 1 && (
               <>
                 <div className="vertical-movie">
                   <div className="poster">
                     <img
-                      src={`https://image.tmdb.org/t/p/w92` + elem.poster_path}
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[0]?.poster_path
+                      }
                     ></img>
                   </div>
                   <div className="details">
                     <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
-                    <p>{elem.original_title}</p>
-                    <p>{elem.release_date}</p>
+                    <p>{moviearr[0]?.original_title}</p>
+                    <p>{moviearr[0]?.release_date}</p>
+                  </div>
+                </div>
+                <div className="vertical-movie">
+                  <div className="poster">
+                    <img
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[1]?.poster_path
+                      }
+                    ></img>
+                  </div>
+                  <div className="details">
+                    <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
+                    <p>{moviearr[1]?.original_title}</p>
+                    <p>{moviearr[1]?.release_date}</p>
+                  </div>
+                </div>
+                <div className="vertical-movie">
+                  <div className="poster">
+                    <img
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[2]?.poster_path
+                      }
+                    ></img>
+                  </div>
+                  <div className="details">
+                    <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
+                    <p>{moviearr[2]?.original_title}</p>
+                    <p>{moviearr[2]?.release_date}</p>
                   </div>
                 </div>
               </>
-            );
-          })}
+            )}
+            {index >= 0 && index < moviearr.length - 3 && (
+              <>
+                {" "}
+                <div className="vertical-movie">
+                  <div className="poster">
+                    <img
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[index + 1]?.poster_path
+                      }
+                    ></img>
+                  </div>
+                  <div className="details">
+                    <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
+                    <p>{moviearr[index + 1]?.original_title}</p>
+                    <p>{moviearr[index + 1]?.release_date}</p>
+                  </div>
+                </div>
+                <div className="vertical-movie">
+                  <div className="poster">
+                    <img
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[index + 2]?.poster_path
+                      }
+                    ></img>
+                  </div>
+                  <div className="details">
+                    <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
+                    <p>{moviearr[index + 2]?.original_title}</p>
+                    <p>{moviearr[index + 2]?.release_date}</p>
+                  </div>
+                </div>
+                <div className="vertical-movie">
+                  <div className="poster">
+                    <img
+                      src={
+                        `https://image.tmdb.org/t/p/w92` +
+                        moviearr[index + 3]?.poster_path
+                      }
+                    ></img>
+                  </div>
+                  <div className="details">
+                    <PlayCircleOutlineIcon style={{ fontSize: "40px" }} />
+                    <p>{moviearr[index + 3]?.original_title}</p>
+                    <p>{moviearr[index + 3]?.release_date}</p>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
