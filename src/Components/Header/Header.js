@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./header.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useNavigate } from "react-router-dom";
-
+import Cookies from "js-cookie";
 const style = {
   position: "absolute",
   top: "50%",
@@ -18,11 +18,13 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-export default function Header() {
+export default function Header(props) {
   const [open, setOpen] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const navigate = useNavigate();
+
   return (
     <div>
       <header>
@@ -98,10 +100,16 @@ export default function Header() {
         <button
           className="watchlist"
           onClick={() => {
-            navigate("/login");
+            if (localStorage.getItem("token")) {
+              localStorage.removeItem("token");
+              Cookies.remove("history");
+              window.location.reload();
+            } else {
+              navigate("/login");
+            }
           }}
         >
-          Sign in
+          {props.authButton}
         </button>
         <select className="language-select">
           <default>EN</default>

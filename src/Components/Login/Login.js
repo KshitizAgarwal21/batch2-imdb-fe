@@ -7,7 +7,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import Histor from "../History/Histor";
 import Cookies from "js-cookie";
 
-export default function Login() {
+export default function Login(props) {
   const [formData, setFormData] = useState({});
 
   const navigate = useNavigate();
@@ -18,7 +18,6 @@ export default function Login() {
   };
 
   useEffect(() => {
-    console.log(JSON.parse(Cookies.get("history")));
     if (localStorage.getItem("token")) {
       navigate("/");
     }
@@ -34,6 +33,7 @@ export default function Login() {
       resp.data.msg == "oauth successfull"
     ) {
       localStorage.setItem("token", resp.data.token);
+
       navigate("/");
     }
   };
@@ -43,6 +43,7 @@ export default function Login() {
       formData
     );
     localStorage.setItem("token", resp.data.token);
+    props.setAuthButton("Sign out");
     navigate("/");
   };
   return (

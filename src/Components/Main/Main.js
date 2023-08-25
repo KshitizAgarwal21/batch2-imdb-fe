@@ -46,9 +46,18 @@ export default function Main() {
     }
   };
   function handleVideo(elem) {
-    historyItems.push(elem);
+    if (Cookies.get("history")) {
+      const oldItems = JSON.parse(Cookies.get("history"));
 
-    Cookies.set("history", JSON.stringify(historyItems));
+      historyItems = [...oldItems];
+      historyItems.push({ title: elem.title, poster_path: elem.poster_path });
+      console.log(historyItems);
+      Cookies.set("history", JSON.stringify(historyItems));
+    } else {
+      historyItems.push({ title: elem.title, poster_path: elem.poster_path });
+      Cookies.set("history", JSON.stringify(historyItems));
+    }
+
     navigate("/play/" + elem.id);
   }
 
